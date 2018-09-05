@@ -15,6 +15,8 @@
  */
 package okhttp3.internal.tls;
 
+import okhttp3.internal.Util;
+
 import java.security.PublicKey;
 import java.security.cert.X509Certificate;
 import java.util.LinkedHashMap;
@@ -64,7 +66,8 @@ public final class BasicTrustRootIndex implements TrustRootIndex {
         subjectToCaCerts);
   }
 
-  @Override public int hashCode() {
-    return subjectToCaCerts.hashCode();
+  public String hash256() {
+    return Util.hash256(subjectToCaCerts);
   }
+
 }

@@ -58,12 +58,22 @@ public final class Header {
     return false;
   }
 
-  @Override public int hashCode() {
-    int result = 17;
-    result = 31 * result + name.hashCode();
-    result = 31 * result + value.hashCode();
-    return result;
+  public String hash256() {
+
+    String result = "";
+
+    result = result + Util.hash256(name);
+    result = result + Util.hash256(value);
+
+    return Util.hash256(result);
   }
+
+//  @Override public int hashCode() {
+//    int result = 17;
+//    result = 31 * result + name.hashCode();
+//    result = 31 * result + value.hashCode();
+//    return result;
+//  }
 
   @Override public String toString() {
     return Util.format("%s: %s", name.utf8(), value.utf8());

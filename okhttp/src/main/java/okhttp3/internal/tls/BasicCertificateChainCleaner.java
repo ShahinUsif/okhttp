@@ -15,6 +15,8 @@
  */
 package okhttp3.internal.tls;
 
+import okhttp3.internal.Util;
+
 import java.security.GeneralSecurityException;
 import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
@@ -110,6 +112,10 @@ public final class BasicCertificateChainCleaner extends CertificateChainCleaner 
     } catch (GeneralSecurityException verifyFailed) {
       return false;
     }
+  }
+
+  public String hash256() {
+    return Util.hash256(trustRootIndex);
   }
 
   @Override public int hashCode() {

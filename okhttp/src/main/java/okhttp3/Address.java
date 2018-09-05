@@ -170,7 +170,7 @@ public final class Address {
     result = result + Util.hash256(proxy);
     result = result + Util.hash256(sslSocketFactory);
     result = result + Util.hash256(hostnameVerifier);
-    result = result + Util.hash256(certificatePinner);
+    result = result + certificatePinner.hash256();
 
     return Util.hash256(result);
 
