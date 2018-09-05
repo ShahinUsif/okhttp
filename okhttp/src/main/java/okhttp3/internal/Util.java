@@ -15,9 +15,7 @@
  */
 package okhttp3.internal;
 
-import java.io.Closeable;
-import java.io.IOException;
-import java.io.InterruptedIOException;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.IDN;
@@ -28,6 +26,8 @@ import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -671,5 +671,74 @@ public final class Util {
     } catch (GeneralSecurityException e) {
       throw assertionError("No System TLS", e); // The system has no TLS. Just give up.
     }
+  }
+
+  public static String hash256(String message) {
+
+    try {
+      MessageDigest md = MessageDigest.getInstance("SHA-512");
+      byte[] digest = md.digest(message.getBytes());
+      StringBuilder sb = new StringBuilder();
+      for (int i = 0; i < digest.length; i++) {
+        sb.append(Integer.toString((digest[i] & 0xff) + 0x100, 16).substring(1));
+      }
+
+      return sb.toString();
+    } catch (NoSuchAlgorithmException ex) {
+      return "";
+    } catch (Exception ex) {
+      return "";
+    }
+
+  }
+
+  public static String hash256(Object message) {
+
+    try {
+      MessageDigest md = MessageDigest.getInstance("SHA-512");
+      byte[] bytes = objectGetBytes(message);
+
+      if(bytes == null)
+        return "";
+
+      byte[] digest = md.digest(bytes);
+      StringBuilder sb = new StringBuilder();
+      for (int i = 0; i < digest.length; i++) {
+        sb.append(Integer.toString((digest[i] & 0xff) + 0x100, 16).substring(1));
+      }
+
+      return sb.toString();
+    } catch (NoSuchAlgorithmException ex) {
+      return "";
+    } catch (Exception ex) {
+      return "";
+    }
+
+  }
+
+  private static byte[] objectGetBytes(Object object) {
+
+    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+    ObjectOutput out = null;
+    byte[] resultBytes = null;
+
+    try {
+      out = new ObjectOutputStream(bos);
+      out.writeObject(object);
+      out.flush();
+
+      resultBytes = bos.toByteArray();
+    }catch (Exception ex) {
+
+    } finally {
+      try {
+        bos.close();
+      } catch (IOException ex) {
+        // ignore close exception
+      }
+    }
+
+    return resultBytes;
+
   }
 }

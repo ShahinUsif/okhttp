@@ -15,6 +15,8 @@
  */
 package okhttp3;
 
+import okhttp3.internal.Util;
+
 import java.nio.charset.Charset;
 import javax.annotation.Nullable;
 
@@ -66,12 +68,15 @@ public final class Challenge {
         && ((Challenge) other).charset.equals(charset);
   }
 
-  @Override public int hashCode() {
-    int result = 29;
-    result = 31 * result + realm.hashCode();
-    result = 31 * result + scheme.hashCode();
-    result = 31 * result + charset.hashCode();
-    return result;
+  public String hash256() {
+    String result = "";
+
+    result = result + Util.hash256(realm);
+    result = result + Util.hash256(scheme);
+    result = result + Util.hash256(charset);
+
+    return Util.hash256(result);
+
   }
 
   @Override public String toString() {

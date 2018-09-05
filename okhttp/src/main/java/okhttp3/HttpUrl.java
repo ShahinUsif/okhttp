@@ -932,8 +932,8 @@ public final class HttpUrl {
     return other instanceof HttpUrl && ((HttpUrl) other).url.equals(url);
   }
 
-  @Override public int hashCode() {
-    return url.hashCode();
+  public String hash256() {
+    return Util.hash256(url);
   }
 
   @Override public String toString() {

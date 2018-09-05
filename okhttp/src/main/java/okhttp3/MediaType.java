@@ -15,6 +15,8 @@
  */
 package okhttp3;
 
+import okhttp3.internal.Util;
+
 import java.nio.charset.Charset;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -155,7 +157,7 @@ public final class MediaType {
     return other instanceof MediaType && ((MediaType) other).mediaType.equals(mediaType);
   }
 
-  @Override public int hashCode() {
-    return mediaType.hashCode();
+  public String hash256() {
+    return Util.hash256(mediaType);
   }
 }

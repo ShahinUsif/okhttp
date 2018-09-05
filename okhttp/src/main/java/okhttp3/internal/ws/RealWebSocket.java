@@ -19,10 +19,10 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.net.ProtocolException;
 import java.net.SocketTimeoutException;
+import java.security.SecureRandom;
 import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -72,7 +72,7 @@ public final class RealWebSocket implements WebSocket, WebSocketReader.FrameCall
   private final Request originalRequest;
 
   final WebSocketListener listener;
-  private final Random random;
+  private final SecureRandom random;
   private final long pingIntervalMillis;
   private final String key;
 
@@ -139,7 +139,7 @@ public final class RealWebSocket implements WebSocket, WebSocketReader.FrameCall
   /** True if we have sent a ping that is still awaiting a reply. */
   private boolean awaitingPong;
 
-  public RealWebSocket(Request request, WebSocketListener listener, Random random,
+  public RealWebSocket(Request request, WebSocketListener listener, SecureRandom random,
       long pingIntervalMillis) {
     if (!"GET".equals(request.method())) {
       throw new IllegalArgumentException("Request must be GET: " + request.method());

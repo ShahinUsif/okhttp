@@ -164,8 +164,9 @@ public final class Headers {
         && Arrays.equals(((Headers) other).namesAndValues, namesAndValues);
   }
 
-  @Override public int hashCode() {
-    return Arrays.hashCode(namesAndValues);
+  public String hash256() {
+    return Util.hash256(namesAndValues);
+    //return Arrays.hashCode(namesAndValues);
   }
 
   @Override public String toString() {

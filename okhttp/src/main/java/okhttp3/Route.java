@@ -15,6 +15,8 @@
  */
 package okhttp3;
 
+import okhttp3.internal.Util;
+
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import javax.annotation.Nullable;
@@ -87,12 +89,15 @@ public final class Route {
         && ((Route) other).inetSocketAddress.equals(inetSocketAddress);
   }
 
-  @Override public int hashCode() {
-    int result = 17;
-    result = 31 * result + address.hashCode();
-    result = 31 * result + proxy.hashCode();
-    result = 31 * result + inetSocketAddress.hashCode();
-    return result;
+  public String hash256() {
+    String result = "";
+
+    result = result + address.hash256();
+    result = result + Util.hash256(proxy);
+    result = result + Util.hash256(inetSocketAddress);
+
+    return Util.hash256(result);
+
   }
 
   @Override public String toString() {

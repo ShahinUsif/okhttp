@@ -132,12 +132,16 @@ public final class Handshake {
         && localCertificates.equals(that.localCertificates);
   }
 
-  @Override public int hashCode() {
-    int result = 17;
-    result = 31 * result + tlsVersion.hashCode();
-    result = 31 * result + cipherSuite.hashCode();
-    result = 31 * result + peerCertificates.hashCode();
-    result = 31 * result + localCertificates.hashCode();
-    return result;
+  public String hash256() {
+
+    String result = "";
+
+    result = result + Util.hash256(tlsVersion);
+    result = result + Util.hash256(cipherSuite);
+    result = result + Util.hash256(peerCertificates);
+    result = result + Util.hash256(localCertificates);
+
+    return result + Util.hash256(result);
   }
+
 }

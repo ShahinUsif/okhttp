@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Set;
 import javax.annotation.Nullable;
 import javax.net.ssl.SSLPeerUnverifiedException;
+
+import okhttp3.internal.Util;
 import okhttp3.internal.tls.CertificateChainCleaner;
 import okio.ByteString;
 
@@ -143,11 +145,19 @@ public final class CertificatePinner {
         && pins.equals(((CertificatePinner) other).pins));
   }
 
-  @Override public int hashCode() {
-    int result = certificateChainCleaner != null ? certificateChainCleaner.hashCode() : 0;
-    result = 31 * result + pins.hashCode();
+  public String hash256() {
+    String result = certificateChainCleaner != null ? Util.hash256(certificateChainCleaner) : "";
+
+    result = result + Util.hash256(pins);
+
     return result;
   }
+
+//  @Override public int hashCode() {
+//    int result = certificateChainCleaner != null ? certificateChainCleaner.hashCode() : 0;
+//    result = 31 * result + pins.hashCode();
+//    return result;
+//  }
 
   /**
    * Confirms that at least one of the certificates pinned for {@code hostname} is in {@code
@@ -303,13 +313,18 @@ public final class CertificatePinner {
           && hash.equals(((Pin) other).hash);
     }
 
-    @Override public int hashCode() {
-      int result = 17;
-      result = 31 * result + pattern.hashCode();
-      result = 31 * result + hashAlgorithm.hashCode();
-      result = 31 * result + hash.hashCode();
-      return result;
+    public String hash256() {
+
+      String result = "";
+
+      result = result + Util.hash256(pattern);
+      result = result + Util.hash256(hashAlgorithm);
+      result = result + Util.hash256(hash);
+
+      return Util.hash256(result);
+
     }
+
 
     @Override public String toString() {
       return hashAlgorithm + hash.base64();

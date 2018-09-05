@@ -157,19 +157,23 @@ public final class Address {
         && equalsNonHost((Address) other);
   }
 
-  @Override public int hashCode() {
-    int result = 17;
-    result = 31 * result + url.hashCode();
-    result = 31 * result + dns.hashCode();
-    result = 31 * result + proxyAuthenticator.hashCode();
-    result = 31 * result + protocols.hashCode();
-    result = 31 * result + connectionSpecs.hashCode();
-    result = 31 * result + proxySelector.hashCode();
-    result = 31 * result + (proxy != null ? proxy.hashCode() : 0);
-    result = 31 * result + (sslSocketFactory != null ? sslSocketFactory.hashCode() : 0);
-    result = 31 * result + (hostnameVerifier != null ? hostnameVerifier.hashCode() : 0);
-    result = 31 * result + (certificatePinner != null ? certificatePinner.hashCode() : 0);
-    return result;
+  public String hash256() {
+
+    String result = "";
+
+    result = result + url.hash256();
+    result = result + Util.hash256(dns);
+    result = result + Util.hash256(proxyAuthenticator);
+    result = result + Util.hash256(protocols);
+    result = result + Util.hash256(connectionSpecs);
+    result = result + Util.hash256(proxySelector);
+    result = result + Util.hash256(proxy);
+    result = result + Util.hash256(sslSocketFactory);
+    result = result + Util.hash256(hostnameVerifier);
+    result = result + Util.hash256(certificatePinner);
+
+    return Util.hash256(result);
+
   }
 
   boolean equalsNonHost(Address that) {

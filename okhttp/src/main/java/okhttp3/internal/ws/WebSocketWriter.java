@@ -16,7 +16,8 @@
 package okhttp3.internal.ws;
 
 import java.io.IOException;
-import java.util.Random;
+import java.security.SecureRandom;
+
 import okio.Buffer;
 import okio.BufferedSink;
 import okio.ByteString;
@@ -43,7 +44,7 @@ import static okhttp3.internal.ws.WebSocketProtocol.validateCloseCode;
  */
 final class WebSocketWriter {
   final boolean isClient;
-  final Random random;
+  final SecureRandom random;
 
   final BufferedSink sink;
   /** The {@link Buffer} of {@link #sink}. Write to this and then flush/emit {@link #sink}. */
@@ -58,7 +59,7 @@ final class WebSocketWriter {
   private final byte[] maskKey;
   private final Buffer.UnsafeCursor maskCursor;
 
-  WebSocketWriter(boolean isClient, BufferedSink sink, Random random) {
+  WebSocketWriter(boolean isClient, BufferedSink sink, SecureRandom random) {
     if (sink == null) throw new NullPointerException("sink == null");
     if (random == null) throw new NullPointerException("random == null");
     this.isClient = isClient;
